@@ -1,6 +1,6 @@
 // Mock data for development before Supabase is connected
 
-import { Business, Competitor, TrackingResult, VisibilityMetrics, TrendData, DashboardData } from '@/types/database';
+import { Business, Competitor, TrackingResult, VisibilityMetrics, TrendData, DashboardData, CompetitorMention } from '@/types/database';
 
 export const mockBusiness: Business = {
   id: '1',
@@ -12,6 +12,8 @@ export const mockBusiness: Business = {
   neighborhood: 'North Beach',
   address: '123 Columbus Ave, San Francisco, CA 94133',
   website_url: 'https://mariositalian.com',
+  is_active: true,
+  tracking_enabled: true,
   created_at: '2024-01-15T00:00:00Z',
   updated_at: '2024-01-15T00:00:00Z',
 };
@@ -65,6 +67,27 @@ export const mockPreviousMetrics: VisibilityMetrics = {
   competitor_gap: -22,
 };
 
+const mockCompetitorMentions1: CompetitorMention[] = [
+  {
+    id: 'cm-1',
+    tracking_result_id: 'result-1',
+    competitor_id: 'comp-1',
+    competitor_name: "Tony's Pizza Napoletana",
+    mention_position: 1,
+    sentiment: 'positive',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'cm-2',
+    tracking_result_id: 'result-1',
+    competitor_id: 'comp-2',
+    competitor_name: 'Caffe Sport',
+    mention_position: 3,
+    sentiment: 'positive',
+    created_at: new Date().toISOString(),
+  },
+];
+
 export const mockTrackingResults: TrackingResult[] = [
   {
     id: 'result-1',
@@ -75,12 +98,11 @@ export const mockTrackingResults: TrackingResult[] = [
     is_mentioned: true,
     mention_position: 2,
     mention_text: "Mario's Italian Kitchen - Excellent homemade pasta and authentic Italian atmosphere",
+    has_citation: true,
     citation_url: 'https://mariositalian.com',
     sentiment: 'positive',
-    competitor_mentions: [
-      { competitor_id: 'comp-1', competitor_name: "Tony's Pizza Napoletana", position: 1, sentiment: 'positive' },
-      { competitor_id: 'comp-2', competitor_name: 'Caffe Sport', position: 3, sentiment: 'positive' },
-    ],
+    query_timestamp: new Date().toISOString(),
+    competitor_mentions: mockCompetitorMentions1,
     created_at: new Date().toISOString(),
   },
   {
@@ -92,7 +114,9 @@ export const mockTrackingResults: TrackingResult[] = [
     is_mentioned: true,
     mention_position: 1,
     mention_text: "Mario's Italian Kitchen stands out for their handmade pasta and cozy atmosphere",
+    has_citation: false,
     sentiment: 'positive',
+    query_timestamp: new Date().toISOString(),
     competitor_mentions: [],
     created_at: new Date().toISOString(),
   },
@@ -103,7 +127,8 @@ export const mockTrackingResults: TrackingResult[] = [
     llm_platform: 'chatgpt',
     raw_response: "The best places for pasta in San Francisco include: 1. Flour + Water - Modern Italian with incredible handmade pasta 2. A16 - Neapolitan-style with great pasta dishes 3. Delfina - Classic Italian cuisine...",
     is_mentioned: false,
-    sentiment: undefined,
+    has_citation: false,
+    query_timestamp: new Date().toISOString(),
     competitor_mentions: [],
     created_at: new Date().toISOString(),
   },

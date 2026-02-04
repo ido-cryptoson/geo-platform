@@ -12,13 +12,13 @@ export function CompetitorTable({ competitors, results }: CompetitorTableProps) 
   // Calculate competitor metrics from results
   const competitorMetrics = competitors.map(comp => {
     const mentions = results.flatMap(r =>
-      r.competitor_mentions.filter(m => m.competitor_id === comp.id)
+      (r.competitor_mentions || []).filter(m => m.competitor_id === comp.id)
     );
 
     const mentionCount = mentions.length;
     const positions = mentions
-      .filter(m => m.position !== undefined)
-      .map(m => m.position!);
+      .filter(m => m.mention_position !== undefined)
+      .map(m => m.mention_position!);
     const avgPosition = positions.length > 0
       ? positions.reduce((a, b) => a + b, 0) / positions.length
       : null;
